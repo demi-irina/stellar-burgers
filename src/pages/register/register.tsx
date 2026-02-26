@@ -13,7 +13,7 @@ export const Register: FC = () => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(registerUser()); // TODO
+    dispatch(registerUser({ email, name: userName, password }));
   };
 
   return (

@@ -1,37 +1,93 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import {
+  registerUserApi,
+  loginUserApi,
+  getUserApi,
+  updateUserApi,
+  logoutApi,
+  TRegisterData,
+  TLoginData
+} from '@api';
 import { TUser } from '@utils-types';
+import { setCookie, getCookie, deleteCookie } from '../../utils/cookie';
 
 type TUserState = {
   user: TUser | null;
+  isAuthChecked: boolean;
   isLoading: boolean;
   error: string | null;
 };
 
 const initialState: TUserState = {
   user: null,
+  isAuthChecked: false,
   isLoading: false,
   error: null
 };
 
-export const registerUser = createAsyncThunk('user/register', async () => {});
+export const registerUser = createAsyncThunk(
+  'user/register',
+  async (data: TRegisterData) => {
+    const res = await registerUserApi(data);
+    setCookie('accessToken', res.accessToken);
+    localStorage.setItem('refreshToken', res.refreshToken);
+    return res.user;
+  }
+);
 
-export const loginUser = createAsyncThunk('user/login', async () => {});
+export const loginUser = createAsyncThunk(
+  'user/login',
+  async (data: TLoginData) => {
+    const res = await loginUserApi(data);
+    setCookie('accessToken', res.accessToken);
+    localStorage.setItem('refreshToken', res.refreshToken);
+    return res.user;
+  }
+);
 
-export const getUser = createAsyncThunk('user/getUser', async () => {});
+export const getUser = createAsyncThunk('user/getUser', async () => {
+  const res = await getUserApi();
+  return res.user;
+});
 
-export const updateUser = createAsyncThunk('user/updateUser', async () => {});
+export const updateUser = createAsyncThunk(
+  'user/updateUser',
+  async (data: Partial<TRegisterData>) => {
+    const res = await updateUserApi(data);
+    return res.user;
+  }
+);
 
-export const logoutUser = createAsyncThunk('user/logout', async () => {});
+export const logoutUser = createAsyncThunk('user/logout', async () => {
+  await logoutApi();
+  deleteCookie('accessToken');
+  localStorage.removeItem('refreshToken');
+});
+
+export const checkUserAuth = createAsyncThunk(
+  'user/checkUser',
+  async (_, { dispatch }) => {
+    if (getCookie('accessToken')) {
+      await dispatch(getUser());
+    }
+    dispatch(authChecked());
+  }
+);
 
 const userSlice = createSlice({
   name: 'user',
   initialState,
   selectors: {
     selectUser: (state) => state.user,
+    selectIsAuthChecked: (state) => state.isAuthChecked,
     selectUserLoading: (state) => state.isLoading,
     selectUserError: (state) => state.error
   },
-  reducers: {},
+  reducers: {
+    authChecked: (state) => {
+      state.isAuthChecked = true;
+    }
+  },
   extraReducers: (builder) => {
     builder
       // register
@@ -41,7 +97,7 @@ const userSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.user = action.payload as any; // TODO
+        state.user = action.payload;
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.isLoading = false;
@@ -54,7 +110,7 @@ const userSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.user = action.payload as any; // TODO
+        state.user = action.payload;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
@@ -67,7 +123,7 @@ const userSlice = createSlice({
       })
       .addCase(getUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.user = action.payload as any; // TODO
+        state.user = action.payload;
       })
       .addCase(getUser.rejected, (state, action) => {
         state.isLoading = false;
@@ -81,7 +137,7 @@ const userSlice = createSlice({
       })
       .addCase(updateUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.user = action.payload as any; // TODO
+        state.user = action.payload;
       })
       .addCase(updateUser.rejected, (state, action) => {
         state.isLoading = false;
@@ -104,7 +160,13 @@ const userSlice = createSlice({
   }
 });
 
-export const { selectUser, selectUserLoading, selectUserError } =
-  userSlice.selectors;
+export const { authChecked } = userSlice.actions;
+
+export const {
+  selectUser,
+  selectIsAuthChecked,
+  selectUserLoading,
+  selectUserError
+} = userSlice.selectors;
 
 export default userSlice.reducer;
