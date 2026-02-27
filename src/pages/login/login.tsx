@@ -1,11 +1,17 @@
 import { FC, SyntheticEvent, useState } from 'react';
 import { LoginUI } from '@ui-pages';
+import { Preloader } from '@ui';
 import { useDispatch, useSelector } from '@store';
-import { loginUser, selectUserError } from '@slices/userSlice';
+import {
+  loginUser,
+  selectAuthError,
+  selectAuthLoading
+} from '@slices/userSlice';
 
 export const Login: FC = () => {
   const dispatch = useDispatch();
-  const error = useSelector(selectUserError);
+  const authError = useSelector(selectAuthError);
+  const isAuthLoading = useSelector(selectAuthLoading);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -15,9 +21,13 @@ export const Login: FC = () => {
     dispatch(loginUser({ email, password }));
   };
 
+  if (isAuthLoading) {
+    return <Preloader />;
+  }
+
   return (
     <LoginUI
-      errorText={error || ''}
+      errorText={authError || ''}
       email={email}
       setEmail={setEmail}
       password={password}

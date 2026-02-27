@@ -4,6 +4,7 @@ import { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from '@store';
 import {
   fetchProfileOrders,
+  selectProfileOrdersError,
   selectProfileOrders,
   selectProfileOrdersLoading
 } from '@slices/profileOrdersSlice';
@@ -11,14 +12,23 @@ import {
 export const ProfileOrders: FC = () => {
   const dispatch = useDispatch();
   const orders = useSelector(selectProfileOrders);
-  const isLoading = useSelector(selectProfileOrdersLoading);
+  const isProfileOrdersLoading = useSelector(selectProfileOrdersLoading);
+  const profileOrdersError = useSelector(selectProfileOrdersError);
 
   useEffect(() => {
     dispatch(fetchProfileOrders());
   }, [dispatch]);
 
-  if (isLoading) {
+  if (isProfileOrdersLoading) {
     return <Preloader />;
+  }
+
+  if (profileOrdersError) {
+    return (
+      <p className='text text_type_main-medium text_color_error'>
+        {profileOrdersError}
+      </p>
+    );
   }
 
   return <ProfileOrdersUI orders={orders} />;

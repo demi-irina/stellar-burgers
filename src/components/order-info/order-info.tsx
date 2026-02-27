@@ -3,10 +3,15 @@ import { useParams } from 'react-router-dom';
 import { OrderInfoUI, Preloader } from '@ui';
 import { TIngredient } from '@utils-types';
 import { useDispatch, useSelector } from '@store';
-import { selectIngredients } from '@slices/ingredientsSlice';
+import {
+  selectIngredients,
+  selectIngredientsError,
+  selectIngredientsLoading
+} from '@slices/ingredientsSlice';
 import {
   fetchOrderByNumber,
   selectOrderData,
+  selectOrderError,
   selectOrderLoading
 } from '@slices/orderSlice';
 
@@ -16,7 +21,10 @@ export const OrderInfo: FC = () => {
   const dispatch = useDispatch();
   const orderData = useSelector(selectOrderData);
   const ingredients = useSelector(selectIngredients);
-  const isLoading = useSelector(selectOrderLoading);
+  const isIngredientsLoading = useSelector(selectIngredientsLoading);
+  const ingredientsError = useSelector(selectIngredientsError);
+  const isOrderLoading = useSelector(selectOrderLoading);
+  const orderError = useSelector(selectOrderError);
 
   useEffect(() => {
     if (number) {
@@ -65,8 +73,20 @@ export const OrderInfo: FC = () => {
     };
   }, [orderData, ingredients]);
 
-  if (isLoading || !orderInfo) {
+  if (isOrderLoading || isIngredientsLoading) {
     return <Preloader />;
+  }
+
+  if (orderError || ingredientsError) {
+    return (
+      <p className={`text text_type_main-medium text_color_error`}>
+        {orderError || ingredientsError}
+      </p>
+    );
+  }
+
+  if (!orderInfo) {
+    return <p className='text text_type_main-medium'>Заказ не найден</p>;
   }
 
   return <OrderInfoUI orderInfo={orderInfo} />;

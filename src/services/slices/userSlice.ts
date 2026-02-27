@@ -14,15 +14,23 @@ import { setCookie, getCookie, deleteCookie } from '../../utils/cookie';
 type TUserState = {
   user: TUser | null;
   isAuthChecked: boolean;
-  isLoading: boolean;
-  error: string | null;
+  authLoading: boolean;
+  authError: string | null;
+  profileLoading: boolean;
+  profileError: string | null;
+  logoutLoading: boolean;
+  logoutError: string | null;
 };
 
 const initialState: TUserState = {
   user: null,
   isAuthChecked: false,
-  isLoading: false,
-  error: null
+  authLoading: false,
+  authError: null,
+  profileLoading: false,
+  profileError: null,
+  logoutLoading: false,
+  logoutError: null
 };
 
 export const registerUser = createAsyncThunk(
@@ -80,8 +88,12 @@ const userSlice = createSlice({
   selectors: {
     selectUser: (state) => state.user,
     selectIsAuthChecked: (state) => state.isAuthChecked,
-    selectUserLoading: (state) => state.isLoading,
-    selectUserError: (state) => state.error
+    selectAuthLoading: (state) => state.authLoading,
+    selectAuthError: (state) => state.authError,
+    selectProfileLoading: (state) => state.profileLoading,
+    selectProfileError: (state) => state.profileError,
+    selectLogoutLoading: (state) => state.logoutLoading,
+    selectLogoutError: (state) => state.logoutError
   },
   reducers: {
     authChecked: (state) => {
@@ -92,70 +104,70 @@ const userSlice = createSlice({
     builder
       // register
       .addCase(registerUser.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
+        state.authLoading = true;
+        state.authError = null;
       })
       .addCase(registerUser.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.authLoading = false;
         state.user = action.payload;
       })
       .addCase(registerUser.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.error.message || 'Ошибка регистрации';
+        state.authLoading = false;
+        state.authError = action.error.message || 'Ошибка регистрации';
       })
       // login
       .addCase(loginUser.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
+        state.authLoading = true;
+        state.authError = null;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.authLoading = false;
         state.user = action.payload;
       })
       .addCase(loginUser.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.error.message || 'Ошибка авторизации';
+        state.authLoading = false;
+        state.authError = action.error.message || 'Ошибка авторизации';
       })
       // getUser
       .addCase(getUser.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
+        state.profileLoading = true;
+        state.profileError = null;
       })
       .addCase(getUser.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.profileLoading = false;
         state.user = action.payload;
       })
       .addCase(getUser.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error =
+        state.profileLoading = false;
+        state.profileError =
           action.error.message || 'Ошибка получения данных пользователя';
       })
       // updateUser
       .addCase(updateUser.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
+        state.profileLoading = true;
+        state.profileError = null;
       })
       .addCase(updateUser.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.profileLoading = false;
         state.user = action.payload;
       })
       .addCase(updateUser.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error =
+        state.profileLoading = false;
+        state.profileError =
           action.error.message || 'Ошибка обновления данных пользователя';
       })
       // logout
       .addCase(logoutUser.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
+        state.logoutLoading = true;
+        state.logoutError = null;
       })
       .addCase(logoutUser.fulfilled, (state) => {
-        state.isLoading = false;
+        state.logoutLoading = false;
         state.user = null;
       })
       .addCase(logoutUser.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.error.message || 'Ошибка выхода';
+        state.logoutLoading = false;
+        state.logoutError = action.error.message || 'Ошибка выхода';
       });
   }
 });
@@ -165,8 +177,12 @@ export const { authChecked } = userSlice.actions;
 export const {
   selectUser,
   selectIsAuthChecked,
-  selectUserLoading,
-  selectUserError
+  selectAuthLoading,
+  selectAuthError,
+  selectProfileLoading,
+  selectProfileError,
+  selectLogoutLoading,
+  selectLogoutError
 } = userSlice.selectors;
 
 export default userSlice.reducer;

@@ -2,12 +2,18 @@ import { ProfileUI } from '@ui-pages';
 import { Preloader } from '@ui';
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from '@store';
-import { selectUser, selectUserLoading, updateUser } from '@slices/userSlice';
+import {
+  selectProfileError,
+  selectProfileLoading,
+  selectUser,
+  updateUser
+} from '@slices/userSlice';
 
 export const Profile: FC = () => {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
-  const isLoading = useSelector(selectUserLoading);
+  const isProfileLoading = useSelector(selectProfileLoading);
+  const profileError = useSelector(selectProfileError);
 
   const [formValue, setFormValue] = useState({
     name: user?.name || '',
@@ -49,17 +55,24 @@ export const Profile: FC = () => {
     }));
   };
 
-  if (isLoading) {
+  if (isProfileLoading) {
     return <Preloader />;
   }
 
   return (
-    <ProfileUI
-      formValue={formValue}
-      isFormChanged={isFormChanged}
-      handleCancel={handleCancel}
-      handleSubmit={handleSubmit}
-      handleInputChange={handleInputChange}
-    />
+    <>
+      <ProfileUI
+        formValue={formValue}
+        isFormChanged={isFormChanged}
+        handleCancel={handleCancel}
+        handleSubmit={handleSubmit}
+        handleInputChange={handleInputChange}
+      />
+      {profileError && (
+        <p className='text text_type_main-medium text_color_error'>
+          {profileError}
+        </p>
+      )}
+    </>
   );
 };

@@ -32,7 +32,8 @@ const feedSlice = createSlice({
       totalToday: state.totalToday
     }),
     selectFeedOrders: (state) => state.orders,
-    selectFeedLoading: (state) => state.isLoading
+    selectFeedLoading: (state) => state.isLoading,
+    selectFeedError: (state) => state.error
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -54,7 +55,11 @@ const feedSlice = createSlice({
   }
 });
 
-export const { selectFeedTotal, selectFeedOrders, selectFeedLoading } =
-  feedSlice.selectors;
+export const {
+  selectFeedTotal,
+  selectFeedOrders,
+  selectFeedLoading,
+  selectFeedError
+} = feedSlice.selectors;
 
 export default feedSlice.reducer;

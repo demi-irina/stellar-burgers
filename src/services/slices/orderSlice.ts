@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getOrderByNumberApi } from '@api';
 import { TOrder } from '@utils-types';
 
@@ -28,7 +28,8 @@ const orderSlice = createSlice({
   initialState,
   selectors: {
     selectOrderData: (state) => state.orderData,
-    selectOrderLoading: (state) => state.isLoading
+    selectOrderLoading: (state) => state.isLoading,
+    selectOrderError: (state) => state.error
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -48,6 +49,7 @@ const orderSlice = createSlice({
   }
 });
 
-export const { selectOrderData, selectOrderLoading } = orderSlice.selectors;
+export const { selectOrderData, selectOrderLoading, selectOrderError } =
+  orderSlice.selectors;
 
 export default orderSlice.reducer;

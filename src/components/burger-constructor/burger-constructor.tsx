@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from '@store';
 import {
   closeOrderModal as closeOrderModalAction,
   orderBurger,
+  selectConstructorError,
   selectConstructorItems,
   selectOrderModalData,
   selectOrderRequest
@@ -19,6 +20,7 @@ export const BurgerConstructor: FC = () => {
   const constructorItems = useSelector(selectConstructorItems);
   const orderRequest = useSelector(selectOrderRequest);
   const orderModalData = useSelector(selectOrderModalData);
+  const orderError = useSelector(selectConstructorError);
   const user = useSelector(selectUser);
 
   const onOrderClick = () => {
@@ -53,13 +55,20 @@ export const BurgerConstructor: FC = () => {
   );
 
   return (
-    <BurgerConstructorUI
-      price={price}
-      orderRequest={orderRequest}
-      constructorItems={constructorItems}
-      orderModalData={orderModalData}
-      onOrderClick={onOrderClick}
-      closeOrderModal={closeOrderModal}
-    />
+    <>
+      <BurgerConstructorUI
+        price={price}
+        orderRequest={orderRequest}
+        constructorItems={constructorItems}
+        orderModalData={orderModalData}
+        onOrderClick={onOrderClick}
+        closeOrderModal={closeOrderModal}
+      />
+      {orderError && (
+        <p className='text text_type_main-medium text_color_error'>
+          {orderError}
+        </p>
+      )}
+    </>
   );
 };

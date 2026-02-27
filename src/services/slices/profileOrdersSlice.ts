@@ -24,7 +24,8 @@ const profileOrdersSlice = createSlice({
   initialState,
   selectors: {
     selectProfileOrders: (state) => state.orders,
-    selectProfileOrdersLoading: (state) => state.isLoading
+    selectProfileOrdersLoading: (state) => state.isLoading,
+    selectProfileOrdersError: (state) => state.error
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -44,7 +45,10 @@ const profileOrdersSlice = createSlice({
   }
 });
 
-export const { selectProfileOrders, selectProfileOrdersLoading } =
-  profileOrdersSlice.selectors;
+export const {
+  selectProfileOrders,
+  selectProfileOrdersLoading,
+  selectProfileOrdersError
+} = profileOrdersSlice.selectors;
 
 export default profileOrdersSlice.reducer;

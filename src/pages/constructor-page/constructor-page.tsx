@@ -11,19 +11,19 @@ import {
 } from '@slices/ingredientsSlice';
 
 export const ConstructorPage: FC = () => {
-  const isLoading = useSelector(selectIngredientsLoading);
+  const isIngredientsLoading = useSelector(selectIngredientsLoading);
   const ingredients = useSelector(selectIngredients);
-  const error = useSelector(selectIngredientsError);
+  const ingredientsError = useSelector(selectIngredientsError);
 
   return (
     <main className={styles.containerMain}>
-      {isLoading ? (
+      {isIngredientsLoading ? (
         <Preloader />
-      ) : error ? (
+      ) : ingredientsError ? (
         <div
           className={`${styles.errorMessage} text text_type_main-medium pt-4`}
         >
-          {error}
+          {ingredientsError}
         </div>
       ) : !ingredients.length ? (
         <div
