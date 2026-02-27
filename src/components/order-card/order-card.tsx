@@ -11,6 +11,7 @@ const maxIngredients = 6;
 
 export const OrderCard: FC<OrderCardProps> = memo(({ order }) => {
   const location = useLocation();
+  const showStatus = location.pathname.startsWith('/profile/orders');
 
   const ingredients = useSelector(selectIngredients);
 
@@ -53,6 +54,7 @@ export const OrderCard: FC<OrderCardProps> = memo(({ order }) => {
       orderInfo={orderInfo}
       maxIngredients={maxIngredients}
       locationState={{ background: location }}
+      showStatus={showStatus}
     />
   );
 });
