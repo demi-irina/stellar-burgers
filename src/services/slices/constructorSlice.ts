@@ -23,7 +23,7 @@ export const orderBurger = createAsyncThunk(
   'constructor/orderBurger',
   async (data: string[]) => {
     const res = await orderBurgerApi(data);
-    return res.order;
+    return { ...res.order, ingredients: data };
   }
 );
 
@@ -71,8 +71,6 @@ const constructorSlice = createSlice({
     },
     closeOrderModal(state) {
       state.orderModalData = null;
-      state.bun = null;
-      state.ingredients = [];
     }
   },
   extraReducers: (builder) => {
@@ -83,7 +81,7 @@ const constructorSlice = createSlice({
       })
       .addCase(orderBurger.fulfilled, (state, action) => {
         state.orderRequest = false;
-        state.orderModalData = null;
+        state.orderModalData = action.payload;
         state.bun = null;
         state.ingredients = [];
       })
