@@ -14,7 +14,13 @@ import {
 import '../../index.css';
 import styles from './app.module.css';
 
-import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
+import {
+  AppHeader,
+  IngredientDetails,
+  Modal,
+  OrderInfo,
+  OrderInfoModal
+} from '@components';
 import { ProtectedRoute } from '../protected-route';
 import { useDispatch } from '@store';
 import { fetchIngredients } from '@slices/ingredientsSlice';
@@ -106,11 +112,7 @@ const App = () => {
         <Routes>
           <Route
             path='/feed/:number'
-            element={
-              <Modal title='' onClose={handleModalClose}>
-                <OrderInfo />
-              </Modal>
-            }
+            element={<OrderInfoModal onClose={handleModalClose} />}
           />
           <Route
             path='/ingredients/:id'
@@ -124,9 +126,7 @@ const App = () => {
             path='/profile/orders/:number'
             element={
               <ProtectedRoute>
-                <Modal title='' onClose={handleModalClose}>
-                  <OrderInfo />
-                </Modal>
+                <OrderInfoModal onClose={handleModalClose} />
               </ProtectedRoute>
             }
           />
