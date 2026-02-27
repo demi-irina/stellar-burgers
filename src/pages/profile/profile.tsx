@@ -8,6 +8,7 @@ import {
   selectUser,
   updateUser
 } from '@slices/userSlice';
+import { TRegisterData } from '@api';
 
 export const Profile: FC = () => {
   const dispatch = useDispatch();
@@ -36,7 +37,24 @@ export const Profile: FC = () => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(updateUser(formValue));
+
+    const updatedUserData: Partial<TRegisterData> = {};
+
+    if (formValue.name !== user?.name) {
+      updatedUserData.name = formValue.name;
+    }
+
+    if (formValue.email !== user?.email) {
+      updatedUserData.email = formValue.email;
+    }
+
+    if (formValue.password) {
+      updatedUserData.password = formValue.password;
+    }
+
+    if (Object.keys(updatedUserData).length > 0) {
+      dispatch(updateUser(updatedUserData));
+    }
   };
 
   const handleCancel = (e: SyntheticEvent) => {
