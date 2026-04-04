@@ -1,0 +1,19 @@
+{
+  "success": true,
+  "name": "Био-марсианский space краторный бургер",
+  "order": {
+    "_id": "order1",
+    "owner": {
+      "name": "Тестовый пользователь",
+      "email": "test@example.com",
+      "createdAt": "2026-04-04T10:00:00.000Z",
+      "updatedAt": "2026-04-04T10:00:00.000Z"
+    },
+    "status": "done",
+    "name": "Био-марсианский space краторный бургер",
+    "createdAt": "2026-04-04T10:00:00.000Z",
+    "updatedAt": "2026-04-04T10:00:00.000Z",
+    "number": 42424,
+    "price": 3014
+  }
+}
