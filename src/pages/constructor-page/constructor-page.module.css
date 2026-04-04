@@ -19,3 +19,12 @@
   height: 100%;
   overflow: hidden;
 }
+
+.emptyMessage {
+  margin: 0 auto;
+}
+
+.errorMessage {
+  margin: 0 auto;
+  color: red;
+}
