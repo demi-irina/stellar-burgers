@@ -91,6 +91,8 @@
     "build-storybook": "storybook build",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
+    "jest:run": "jest",
+    "jest:coverage": "jest --coverage",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "npm run lint -- --fix",
     "format": "prettier ./src --write"
